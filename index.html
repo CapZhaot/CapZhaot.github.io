@@ -343,79 +343,14 @@
 
       
         
-          
-            <h3 id="关于这个专题"><a href="#关于这个专题" class="headerlink" title="关于这个专题"></a>关于这个专题</h3><p>想写<code>MySQL</code>的索引专题是源于之前自己在学习<code>MySQL</code>索引时痛苦的经历，你在网上搜索关于<code>MySQL</code>的索引的文章，大多是支离破碎，没有系统性的对知识点的罗列堆砌，文章中会说明你要如何如何做，但是很少涉及去讲为什么要这么做，哪些不能做，很难对<code>MySQL</code>有一个系统性的认知，学习如果没有系统性的话，就很难在实际的项目中灵活运用，出于此目的，自己就打算写一个关于<code>MySQL</code>索引的专题系列，算是自己一个学习的总结，如果同时能帮到你那再好不过了。下面进入正题，我们先来了解一下什么是索引以及索引的类型。</p>
-<h3 id="认识索引"><a href="#认识索引" class="headerlink" title="认识索引"></a>认识索引</h3><p>认识索引是什么东西非常关键，一个非常恰当的比喻就是<code>书的目录页</code>与<code>书的正文内容</code>之间的关系，为了方便查找书中的内容，通过对内容建立<code>索引</code>形成<code>目录</code>。因此，首先你要明白的一点就是，<code>索引</code>它也是一个文件，它是要占据物理空间的。</p>
-<p><strong>比如对于<code>MyISAM</code>存储引擎来说:</strong><br><code>.frm</code>后缀的文件存储的是表结构。<br><code>.myd</code>后缀的文件存储的是表数据。<br><code>.myi</code>后缀的文件存储的就是索引文件。<br>如下图所示:</p>
-<p><img src="http://oplb4mp85.bkt.clouddn.com/2017-07-19%2021-40-43.jpg" alt=""></p>
-<p><strong>对于<code>InnoDB</code>存储引擎来说:</strong><br><code>.frm</code>后缀的文件存储的是表结构。<br><code>.ibd</code>后缀的文件存放索引文件和数据(需要开启<code>innodb_file_per_table</code>参数)</p>
-<p>如下图所示:</p>
-<p><img src="/img/bVRejm" alt="图片描述"></p>
-<p>因此，当你对一张表建立索引时，索引文件的大小也会改变，当你数据表中的数据因为<code>增删改</code>变化时，索引文件也会变化的，只不过<code>MySQL</code>会自动维护索引，这个过程不需要你介入，这也是为什么不恰当的索引会影响<code>MySQL</code>性能的原因。</p>
-<p><strong>总结:</strong><br><strong>1. 索引是按照特定的<code>数据结构</code>把数据表中的数据放在<code>索引文件</code>中，以便于快速查找；</strong><br><strong>2. 索引存在于磁盘中，会占据物理空间。</strong></p>
-<h3 id="索引的类型"><a href="#索引的类型" class="headerlink" title="索引的类型"></a>索引的类型</h3><p>上面说到，索引文件时按照不同的数据结构来存储的，数据结构的不同也产生了不同的索引类型，常见的索引类型包括:</p>
-<ol>
-<li><code>B-Tree</code>索引</li>
-<li><code>哈希</code>索引</li>
-<li>空间数据索引(<code>R-Tree</code>)</li>
-<li>全文索引<br>下面做一一介绍:</li>
-</ol>
-<h4 id="1-B-Tree索引"><a href="#1-B-Tree索引" class="headerlink" title="1.  B-Tree索引"></a>1.  <code>B-Tree</code>索引</h4><p><code>B-Tree</code>索引是最常用的一种索引，如果没有指定特定的类型，那么多半就是<code>B-Tree</code>索引，事实上，很多搜索引擎使用的是它的变种<code>B+Tree</code>，这是对<code>B-Tree</code>的一个优化，如果需要详细了解，可以参考数据结构方面的书籍，这里不做详细探讨。以下统称为<code>B-Tree</code>索引。<br>绝大多数的存储引擎，比如<code>MyISAM</code>和<code>InnoDB</code>都支持这种索引，因此说它是应用最广泛，最常用的一种索引方式，但是不同的存储引擎在具体实现时会稍有不同，比如<code>MyISAM</code>会使用前缀压缩的方式对索引进行压缩，<code>InnoDB</code>则不会。<br>下图展示了<code>B-Tree</code>索引是如何存储被索引的数据的:</p>
-<p><img src="http://oplb4mp85.bkt.clouddn.com/2017-07-19%2022-51-03.jpg" alt=""></p>
-<blockquote>
-<p>说明:</p>
-<ol>
-<li>左图是一个包含三列的数据表，右图则展示了数据是如何被索引的。</li>
-<li>可以看出<code>B-Tree</code>是对索引列是按照顺序存储的，每个叶子节点指向被索引的数据，这也是<code>B-Tree</code>索引支持范围查找数据的原因。</li>
-</ol>
-</blockquote>
-<h4 id="2-哈希索引"><a href="#2-哈希索引" class="headerlink" title="2. 哈希索引"></a>2. 哈希索引</h4><p>相比于<code>B-Tree</code>索引，哈希索引的实现就比较简单了，它是基于哈希表来实现的，对于要索引的列，存储引擎会计算出一一对应的<code>哈希码</code>，然后把哈希码存放在哈希表中作为<code>key</code>，<code>value</code>值是指向该行数据的指针。<br>下图是简单的原理展示:</p>
-<p><img src="http://oplb4mp85.bkt.clouddn.com/2017-07-19%2023-18-57.jpg" alt=""></p>
-<blockquote>
-<p>说明:</p>
-<ol>
-<li>左边紫色图表示一个二列的数据表。</li>
-<li>中间表示对<code>fname</code>列进行哈希索引，计算出哈希值。</li>
-<li>右边绿色图表示把生成的哈希值存放于哈希表中。</li>
-</ol>
-</blockquote>
-<p>当我们执行以下查询时:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> testTable <span class="keyword">where</span> fname = <span class="string">"mary"</span>;</span><br></pre></td></tr></table></figure></p>
-<p><code>MySQL</code>会首先计算查询条件<code>mary</code>的哈希值，然后到哈希表中去找该哈希值，如果找到了根据对应的指针也就找到了需要寻找的数据行。</p>
-<p><strong>哈希表的优势与限制:</strong></p>
-<ul>
-<li><p><strong>优势:</strong></p>
-<ol>
-<li>只需比对哈希值，因此速度非常快，性能优势明显；</li>
-</ol>
-</li>
-<li><p><strong>限制:</strong></p>
-<ol>
-<li>不支持任何范围查询，比如<code>where price &gt; 150</code>，因为是基于哈希计算，支持等值比较。</li>
-<li>哈希表是无序存储的，因此索引数据无法用于排序。</li>
-<li>主流存储引擎不支持该类型，比如<code>MyISAM</code>和<code>InnoDB</code>。哈希索引只有Memory, NDB两种引擎支持。</li>
-</ol>
-</li>
-</ul>
-<p>因此，哈希索引虽然速度快，但其实使用很受限，只适用于某些特殊的场合。</p>
-<h4 id="3-空间数据索引-R-Tree"><a href="#3-空间数据索引-R-Tree" class="headerlink" title="3. 空间数据索引(R-Tree)"></a>3. 空间数据索引(<code>R-Tree</code>)</h4><p>空间索引可用于地理数据存储，它需要<code>GIS</code>相关函数的支持，由于<code>MySQL</code>的<code>GIS</code>支持并不完善，所以该索引方式在<code>MySQL</code>中很少有人使用。</p>
-<h4 id="4-全文索引"><a href="#4-全文索引" class="headerlink" title="4. 全文索引"></a>4. 全文索引</h4><p>全文索引主要用于海量数据的搜索，比如淘宝或者京东对商品的搜索，你不可能使用<code>like</code>进行模糊匹配吧，<code>MySQL</code>从<code>5.6</code>开始支持<code>InnoDB</code>引擎的全文索引，功能没有专业的搜索引擎比如<code>Sphinx</code>或<code>Solr</code>丰富，如果你的需求比较简单，可以尝试一下<code>MySQL</code>的全文索引，否则建议使用专业的搜索引擎。</p>
-<p><strong>总结:</strong><br><strong>1. B-Tree索引使用最广泛，主流引擎都支持。</strong><br><strong>2. 哈希索引性能高，适用于特殊场合。</strong><br><strong>3. <code>R-Tree</code>不常用。</strong><br><strong>4. 全文索引适用于海量数据的关键字模糊搜索。</strong></p>
-<hr>
-<h3 id="索引和存储引擎之间的关系"><a href="#索引和存储引擎之间的关系" class="headerlink" title="索引和存储引擎之间的关系"></a>索引和存储引擎之间的关系</h3><p>上面讲述了索引有不同的类型，存储引擎也有不同的类型，那么索引和存储引擎之间有什么关系呢？<br>首先你需要知道，在<code>MySQL</code>中，索引是在存储引擎中实现的，并不是所有的存储引擎都支持所有的索引类型，比如哈希索引，<code>MyISAM</code>和<code>InnoDB</code>是不支持的；同样，即使对于同一类型的索引，不同的存储引擎实现的方式也可能是不同的，比如<code>MyISAM</code>和<code>InnoDB</code>对<code>B-Tree</code>索引，具体的实现是有差别的。</p>
-<p><strong>总结:</strong><br><strong>1. 不同的存储引擎可能支持不同的索引类型；</strong><br><strong>2. 不同的存储引擎对同一中索引类型可能有不同的实现方式。</strong></p>
-<hr>
-<h3 id="B-Tree索引与唯一索引，主键索引，普通索引的关系"><a href="#B-Tree索引与唯一索引，主键索引，普通索引的关系" class="headerlink" title="B-Tree索引与唯一索引，主键索引，普通索引的关系"></a><code>B-Tree</code>索引与唯一索引，主键索引，普通索引的关系</h3><p>最开始对<code>B-Tree</code>索引与唯一索引，主键索引，普通索引这几种索引的关系很模糊，网上也没搜索到相关的资料，以为他们的关系是并列的，其实并不是，<code>B-Tree</code>只是底层的算法实现，唯一索引，主键索引，普通索引都是基于<code>B-Tree</code>索引算法的，只不过又有各自的特点。<br>通过下图也可看出这种关系:</p>
-<p><img src="http://oplb4mp85.bkt.clouddn.com/2017-07-20%2000-17-45.jpg" alt=""></p>
-<p>至于唯一索引，主键索引，普通索引之间的区别，下面补充一下:</p>
-<ul>
-<li><strong>主键索引:</strong>数据列不允许重复，不允许为<code>NULL</code>.一个表只能有一个主键。</li>
-<li><strong>唯一索引:</strong>数据列不允许重复，允许为<code>NULL</code>值，一个表允许多个列创建唯一索引。</li>
-<li><strong>普通索引:</strong>基本的索引类型，没有唯一性的限制，允许为<code>NULL</code>值。</li>
-</ul>
-<hr>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h3><p>这篇文章先说到这里，目的主要是对<code>MySQL</code>的索引有个概念上的认识，以及了解索引的类型，索引和存储引擎之间的关系， 希望本文对你有所帮助。</p>
-
-          
+          <h3 id="关于这个专题"><a href="#关于这个专题" class="headerlink" title="关于这个专题"></a>关于这个专题</h3><p>想写<code>MySQL</code>的索引专题是源于之前自己在学习<code>MySQL</code>索引时痛苦的经历，你在网上搜索关于<code>MySQL</code>的索引的文章，大多是支离破碎，没有系统性的对知识点的罗列堆砌，文章中会说明你要如何如何做，但是很少涉及去讲为什么要这么做，哪些不能做，很难对<code>MySQL</code>有一个系统性的认知，学习如果没有系统性的话，就很难在实际的项目中灵活运用，出于此目的，自己就打算写一个关于<code>MySQL</code>索引的专题系列，算是自己一个学习的总结，如果同时能帮到你那再好不过了。下面进入正题，我们先来了解一下什么是索引以及索引的类型。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/04/30/MySQL索引专题一-认识索引/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
