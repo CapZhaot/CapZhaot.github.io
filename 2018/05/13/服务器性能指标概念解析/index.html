@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="性能," />
 
 
 
@@ -94,16 +94,18 @@
 
 
 
-<meta name="description" content="An excellent life is in the near future.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="赵涛’Blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="QPSQuery Per Second,(每秒请求数)，就是说服务器在一秒的时间内处理了多少个请求。这里的请求我们通常是指 HTTP 请求，显然数字越大代表服务器的负荷越高、处理能力越强。  作为参考，一个有着简单业务逻辑（包括数据库访问）的程序在单核心运行时可以提供 50 - 100 左右的 QPS，即每秒可以处理 50 - 100 个请求。  TPSTransactions Per Secon">
+<meta name="keywords" content="性能">
+<meta property="og:type" content="article">
+<meta property="og:title" content=" 服务器性能指标概念解析">
+<meta property="og:url" content="http://yoursite.com/2018/05/13/服务器性能指标概念解析/index.html">
 <meta property="og:site_name" content="赵涛’Blog">
-<meta property="og:description" content="An excellent life is in the near future.">
+<meta property="og:description" content="QPSQuery Per Second,(每秒请求数)，就是说服务器在一秒的时间内处理了多少个请求。这里的请求我们通常是指 HTTP 请求，显然数字越大代表服务器的负荷越高、处理能力越强。  作为参考，一个有着简单业务逻辑（包括数据库访问）的程序在单核心运行时可以提供 50 - 100 左右的 QPS，即每秒可以处理 50 - 100 个请求。  TPSTransactions Per Secon">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-13T08:27:43.210Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="赵涛’Blog">
-<meta name="twitter:description" content="An excellent life is in the near future.">
+<meta name="twitter:title" content=" 服务器性能指标概念解析">
+<meta name="twitter:description" content="QPSQuery Per Second,(每秒请求数)，就是说服务器在一秒的时间内处理了多少个请求。这里的请求我们通常是指 HTTP 请求，显然数字越大代表服务器的负荷越高、处理能力越强。  作为参考，一个有着简单业务逻辑（包括数据库访问）的程序在单核心运行时可以提供 50 - 100 左右的 QPS，即每秒可以处理 50 - 100 个请求。  TPSTransactions Per Secon">
 
 
 
@@ -132,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/05/13/服务器性能指标概念解析/"/>
 
 
 
 
 
-  <title>赵涛’Blog</title>
+  <title> 服务器性能指标概念解析 | 赵涛’Blog</title>
   
 
 
@@ -163,9 +165,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
 
@@ -299,9 +299,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -331,9 +331,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/13/服务器性能指标概念解析/" itemprop="url"> 服务器性能指标概念解析</a></h1>
+          <h1 class="post-title" itemprop="name headline"> 服务器性能指标概念解析</h1>
         
 
         <div class="post-meta">
@@ -376,6 +374,11 @@
           
 
           
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 被围观
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
 
           
 
@@ -394,9 +397,7 @@
       
 
       
-        
-          
-            <h4 id="QPS"><a href="#QPS" class="headerlink" title="QPS"></a>QPS</h4><p>Query Per Second,(每秒请求数)，就是说<strong>服务器在一秒的时间内处理了多少个请求</strong>。<br>这里的请求我们通常是指 HTTP 请求，显然数字越大代表服务器的负荷越高、处理能力越强。</p>
+        <h4 id="QPS"><a href="#QPS" class="headerlink" title="QPS"></a>QPS</h4><p>Query Per Second,(每秒请求数)，就是说<strong>服务器在一秒的时间内处理了多少个请求</strong>。<br>这里的请求我们通常是指 HTTP 请求，显然数字越大代表服务器的负荷越高、处理能力越强。</p>
 <blockquote>
 <p>作为参考，一个有着简单业务逻辑（包括数据库访问）的程序在单核心运行时可以提供 50 - 100 左右的 QPS，即每秒可以处理 50 - 100 个请求。</p>
 </blockquote>
@@ -409,8 +410,6 @@
 <h4 id="PV"><a href="#PV" class="headerlink" title="PV"></a>PV</h4><p>Page View(页面访问次数)，每打开或刷新一次页面，就算做一个pv,用户每次刷新即被计算一次。</p>
 <h4 id="UV"><a href="#UV" class="headerlink" title="UV"></a>UV</h4><p>Unique Visitor(独立访客数)，访问您网站的一台电脑客户端为一个访客。0:00-24:00 相同的客户端只被计算一次。</p>
 
-          
-        
       
     </div>
     
@@ -425,285 +424,36 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/01/架构学习笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="赵涛’Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/01/架构学习笔记/" itemprop="url"> 架构学习笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-01T21:14:19+08:00">
-                2018-05-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/性能/" rel="tag"># 性能</a>
           
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/05/01/架构学习笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/01/架构学习笔记/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
       
-        
-          <h3 id="模块和组件有什么区别"><a href="#模块和组件有什么区别" class="headerlink" title="模块和组件有什么区别?"></a>模块和组件有什么区别?</h3><p>模块和组件都是一个系统的组成部分,<strong>只是从不同的角度拆分系统而已.</strong><br>从业务逻辑的角度来拆分系统,得到的单元是”模块”, 划分”模块”的目的是业务之间的解耦,职责分离.<br>从物理的角度来拆分系统后,得到的单元是”组件”,划分组件的目的是为了单元复用.</p>
-<p>比如一个学生管理系统, 从业务逻辑上分为”登录模块”,”个人信息模块”,”选课模块”, 单纯从物理的角度来拆分,可以拆分为”Nginx 组件”,”MySQL”组件,”Web 服务器组件”.</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/01/架构学习笔记/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/01/架构学习笔记/" rel="next" title=" 架构学习笔记">
+                <i class="fa fa-chevron-left"></i>  架构学习笔记
+              </a>
+            
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
 
-    
+          <span class="post-nav-divider"></span>
 
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/30/MySQL索引专题一-认识索引/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="赵涛’Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/30/MySQL索引专题一-认识索引/" itemprop="url">MySQL索引专题一 认识索引</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+          <div class="post-nav-prev post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-30T22:38:59+08:00">
-                2018-04-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/04/30/MySQL索引专题一-认识索引/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/04/30/MySQL索引专题一-认识索引/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <h3 id="关于这个专题"><a href="#关于这个专题" class="headerlink" title="关于这个专题"></a>关于这个专题</h3><p>想写<code>MySQL</code>的索引专题是源于之前自己在学习<code>MySQL</code>索引时痛苦的经历，你在网上搜索关于<code>MySQL</code>的索引的文章，大多是支离破碎，没有系统性的对知识点的罗列堆砌，文章中会说明你要如何如何做，但是很少涉及去讲为什么要这么做，哪些不能做，很难对<code>MySQL</code>有一个系统性的认知，学习如果没有系统性的话，就很难在实际的项目中灵活运用，出于此目的，自己就打算写一个关于<code>MySQL</code>索引的专题系列，算是自己一个学习的总结，如果同时能帮到你那再好不过了。下面进入正题，我们先来了解一下什么是索引以及索引的类型。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/30/MySQL索引专题一-认识索引/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -713,10 +463,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -724,6 +475,17 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -744,8 +506,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -798,6 +569,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#QPS"><span class="nav-number">1.</span> <span class="nav-text">QPS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TPS"><span class="nav-number">2.</span> <span class="nav-text">TPS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RT"><span class="nav-number">3.</span> <span class="nav-text">RT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#并发数"><span class="nav-number">4.</span> <span class="nav-text">并发数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PV"><span class="nav-number">5.</span> <span class="nav-text">PV</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UV"><span class="nav-number">6.</span> <span class="nav-text">UV</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -929,10 +716,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
 
-  
+
 
   
 
@@ -950,6 +737,18 @@
       <script id="dsq-count-scr" src="https://zhaot.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2018/05/13/服务器性能指标概念解析/';
+          this.page.identifier = '2018/05/13/服务器性能指标概念解析/';
+          this.page.title = ' 服务器性能指标概念解析';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zhaot.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
