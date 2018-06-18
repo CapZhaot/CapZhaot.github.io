@@ -102,12 +102,12 @@
 <meta property="og:site_name" content="赵涛’Blog">
 <meta property="og:description" content="为什么需要 Compose?举个例子，比如我们想在本地搭建一套 PHP的开发环境，并且想搭建一个基于docker容器的开发环境，一个传统的推荐做法是每个web组件自己单独使用一个容器，比如MySQL单独开一个容器，Nginx+PHP开一个容器，缓存Redis单独开一个容器，Memcached再开一个容器，每次启动开发环境，都要手动去启动每个容器，docker run的命令后面外加一串长长的参数，每">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2018/06/03/Docker-Compose实践/_image/2018-06-03/2018-06-18-11-23-30.png">
-<meta property="og:updated_time" content="2018-06-18T03:25:21.942Z">
+<meta property="og:image" content="http://oplb4mp85.bkt.clouddn.com/Jietu20180618-113340.jpg">
+<meta property="og:updated_time" content="2018-06-18T03:34:45.943Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker-Compose 实践">
 <meta name="twitter:description" content="为什么需要 Compose?举个例子，比如我们想在本地搭建一套 PHP的开发环境，并且想搭建一个基于docker容器的开发环境，一个传统的推荐做法是每个web组件自己单独使用一个容器，比如MySQL单独开一个容器，Nginx+PHP开一个容器，缓存Redis单独开一个容器，Memcached再开一个容器，每次启动开发环境，都要手动去启动每个容器，docker run的命令后面外加一串长长的参数，每">
-<meta name="twitter:image" content="http://yoursite.com/2018/06/03/Docker-Compose实践/_image/2018-06-03/2018-06-18-11-23-30.png">
+<meta name="twitter:image" content="http://oplb4mp85.bkt.clouddn.com/Jietu20180618-113340.jpg">
 
 
 
@@ -401,6 +401,7 @@
       
         <h3 id="为什么需要-Compose"><a href="#为什么需要-Compose" class="headerlink" title="为什么需要 Compose?"></a>为什么需要 Compose?</h3><p>举个例子，比如我们想在本地搭建一套 PHP的开发环境，并且想搭建一个基于<code>docker</code>容器的开发环境，一个传统的推荐做法是每个<code>web</code>组件自己单独使用一个容器，比如<code>MySQL</code>单独开一个容器，<code>Nginx+PHP</code>开一个容器，缓存<code>Redis</code>单独开一个容器，<code>Memcached</code>再开一个容器，每次启动开发环境，都要手动去启动每个容器，<code>docker run</code>的命令后面外加一串长长的参数，每次都要异常繁琐的方式进行。</p>
 <p><code>Compose</code>就是来解决这个问题的，它使用一个单独的<code>docker-compose.yml</code>文件来管理上面的各个容器，在这个文件中定义了要启动哪些容器，启动参数也配置在文件中，通过这种方式，就实现了一个命令启动所有容器，并且配置好了所有的启动参数，甚至还包括负载均衡容器等。这种实现方式官方称之为<code>容器编排</code>技术，通过<code>docker-compose</code>来实现的<code>容器编排</code>技术。</p>
+<a id="more"></a>
 <p><strong>总结：</strong><br><code>Compose</code>实现了对 Docker 容器集群的快速编排（管理多个容器），简化了容器的启动和配置。</p>
 <h3 id="安装-Compose"><a href="#安装-Compose" class="headerlink" title="安装 Compose"></a>安装 Compose</h3><p><code>Mac</code>系统下直接安装<code>Docker for Mac</code>，自带<code>docker-compose</code>，安装 Docker 之后可以直接使用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker-compose --version</span><br><span class="line"></span><br><span class="line">docker-compose version 1.17.1, build 6d101fb</span><br></pre></td></tr></table></figure></p>
 <hr>
@@ -418,7 +419,8 @@
 <blockquote>
 <p>端口分别映射到主机端口的<code>6381</code>和<code>8380</code>.</p>
 </blockquote>
-<p>在当前目录下执行<code>docker-compose up</code>，两个容器分别启动<br><img src="./_image/2018-06-03/2018-06-18-11-23-30.png" alt=""></p>
+<p>在当前目录下执行<code>docker-compose up</code>，两个容器分别启动</p>
+<p><img src="http://oplb4mp85.bkt.clouddn.com/Jietu20180618-113340.jpg" alt=""></p>
 
       
     </div>
