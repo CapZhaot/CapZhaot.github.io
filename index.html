@@ -444,6 +444,156 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/03/Docker-Compose实践/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="赵涛’Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/03/Docker-Compose实践/" itemprop="url">Docker-Compose 实践</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-03T15:00:09+08:00">
+                2018-06-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/03/Docker-Compose实践/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/03/Docker-Compose实践/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="为什么需要-Compose"><a href="#为什么需要-Compose" class="headerlink" title="为什么需要 Compose?"></a>为什么需要 Compose?</h3><p>举个例子，比如我们想在本地搭建一套 PHP的开发环境，并且想搭建一个基于<code>docker</code>容器的开发环境，一个传统的推荐做法是每个<code>web</code>组件自己单独使用一个容器，比如<code>MySQL</code>单独开一个容器，<code>Nginx+PHP</code>开一个容器，缓存<code>Redis</code>单独开一个容器，<code>Memcached</code>再开一个容器，每次启动开发环境，都要手动去启动每个容器，<code>docker run</code>的命令后面外加一串长长的参数，每次都要异常繁琐的方式进行。</p>
+<p><code>Compose</code>就是来解决这个问题的，它使用一个单独的<code>docker-compose.yml</code>文件来管理上面的各个容器，在这个文件中定义了要启动哪些容器，启动参数也配置在文件中，通过这种方式，就实现了一个命令启动所有容器，并且配置好了所有的启动参数，甚至还包括负载均衡容器等。这种实现方式官方称之为<code>容器编排</code>技术，通过<code>docker-compose</code>来实现的<code>容器编排</code>技术。</p>
+<p><strong>总结：</strong><br><code>Compose</code>实现了对 Docker 容器集群的快速编排（管理多个容器），简化了容器的启动和配置。</p>
+<h3 id="安装-Compose"><a href="#安装-Compose" class="headerlink" title="安装 Compose"></a>安装 Compose</h3><p><code>Mac</code>系统下直接安装<code>Docker for Mac</code>，自带<code>docker-compose</code>，安装 Docker 之后可以直接使用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker-compose --version</span><br><span class="line"></span><br><span class="line">docker-compose version 1.17.1, build 6d101fb</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>要使用<code>Compose</code>成功的启动多个容器需要两个步骤：</p>
+<ol>
+<li>编写好<code>docker-compose.yml</code>模版文件。  </li>
+<li>在该目录下运行<code>docker-compose up</code>命令，一键启动多个容器。<br><strong>就是这么简单。</strong><br>首先第一步，我们来看看如何配置<code>docker-compose.yml</code>文件<h3 id="docker-compose-yml-文件"><a href="#docker-compose-yml-文件" class="headerlink" title="docker-compose.yml 文件"></a>docker-compose.yml 文件</h3>一个最简单的<code>docker-compose.yml</code>长如下这样。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">version: &apos;3&apos;</span><br><span class="line">services:</span><br><span class="line">  web:</span><br><span class="line">    build: .</span><br><span class="line">    ports:</span><br><span class="line">    - &quot;5001:5000&quot;</span><br><span class="line">  redis:</span><br><span class="line">    image: redis</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p><code>version</code>:指明该文件的版本是<code>3</code>，不同的版本会对应不同版本的 <code>docker</code>引擎，不同版本的文件能使用的指令还不一样，高版本的命令会多一些，类似于函数的<code>API</code>版本。<br><code>services</code>：定义多个服务，每个服务对应一个容器，服务名称是自定义的，比如<code>web</code>和<code>redis</code>。<br><code>build</code>：指定 <code>Dockerfile</code> 所在文件夹的路径（可以是绝对路径，或者相对 <code>docker-compose.yml</code>文件的路径）。 <code>Compose</code> 将会利用它自动构建这个镜像，然后使用这个镜像。<br><code>ports</code>：和宿主机的映射端口号，格式为<code>宿主机端口 :容器端口</code>，把容器的<code>5000</code>端口映射到本机的<code>5001</code>端口上。<br><code>image</code>：指定为镜像名称或镜像 <code>ID</code>。如果镜像在本地不存在，<code>Compose</code> 将会尝试拉取这个镜像。</p>
+</blockquote>
+<p><code>version：3</code>版本所有命令<a href="https://docs.docker.com/compose/compose-file/#build" target="_blank" rel="noopener">在这里</a></p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>这里以启动多个<code>redis</code>容器来作为例子，<code>docker-compose.yml</code>文件为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">version: &apos;3&apos;</span><br><span class="line">services:</span><br><span class="line">  redis-slave1:</span><br><span class="line">    image: redis</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;6380:6379&quot;</span><br><span class="line">  redis-slave2:</span><br><span class="line">    image: redis</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;6381:6379&quot;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>端口分别映射到主机端口的<code>6381</code>和<code>8380</code>.</p>
+</blockquote>
+<p>在当前目录下执行<code>docker-compose up</code>，两个容器分别启动<br><img src="./_image/2018-06-03/2018-06-18-11-23-30.png" alt=""></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/03/Symfony上手指南/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1215,7 +1365,7 @@ $results = <span class="keyword">$this</span>-&gt;xxxRepository
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1228,7 +1378,7 @@ $results = <span class="keyword">$this</span>-&gt;xxxRepository
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
