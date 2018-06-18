@@ -107,8 +107,8 @@
 <meta property="og:image" content="http://paieqp4kn.bkt.clouddn.com/2018-06-18-144249.png">
 <meta property="og:image" content="http://paieqp4kn.bkt.clouddn.com/2018-06-18-144618.png">
 <meta property="og:image" content="http://paieqp4kn.bkt.clouddn.com/2018-06-18-144747.png">
-<meta property="og:image" content="http://yoursite.com/2018/06/18/Redis%20集群搭建/_image/2018-06-18-22-49-02.png">
-<meta property="og:updated_time" content="2018-06-18T14:50:40.878Z">
+<meta property="og:image" content="http://paieqp4kn.bkt.clouddn.com/2018-06-18-144856.png">
+<meta property="og:updated_time" content="2018-06-18T14:55:43.881Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dokcer环境下 Redis 集群搭建">
 <meta name="twitter:description" content="为什么要搭建 Redis 集群？虽然Redis单机性能已经很高了，但是 实际上Redis是可以像MySQL那样支持主从结构的，也就是常见的读写分离，主机master负责键的新增和修改，从机slave负责读。 不仅如此，在保证高可用方面，官方推出了Sentinel（哨兵）作为高可用的解决方案，在集群中的节点出现故障时能够及时进行故障转移，踢掉不可用的节点。 这篇文章记录下在本地使用docker来搭">
@@ -439,7 +439,7 @@
 <p>最后，执行启动命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up</span><br></pre></td></tr></table></figure></p>
 <p>打印信息如下：<br><img src="http://paieqp4kn.bkt.clouddn.com/2018-06-18-144618.png" alt=""><br>三个容器分别启动了。</p>
 <p>此时使用<code>redis-cli info replication</code>命令查看复制信息。<br><img src="http://paieqp4kn.bkt.clouddn.com/2018-06-18-144747.png" alt=""><br>可以看到，角色是<code>master</code>，有两个从机。</p>
-<p>查看从机的信息：<br><img src="./_image/2018-06-18-22-49-02.png" alt=""><br>表示这是一台从机。</p>
+<p>查看从机的信息：<br><img src="http://paieqp4kn.bkt.clouddn.com/2018-06-18-144856.png" alt=""><br>表示这是一台从机。</p>
 <p>此时在主机执行一个测试命令<code>set name jarvis</code>，可以看到从机也出现了这个数据。</p>
 <p>完美！</p>
 
