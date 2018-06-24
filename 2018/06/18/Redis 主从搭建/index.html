@@ -97,8 +97,8 @@
 <meta name="description" content="为什么要搭建 Redis 集群？虽然Redis单机性能已经很高了，但是 实际上Redis是可以像MySQL那样支持主从结构的，也就是常见的读写分离，主机master负责键的新增和修改，从机slave负责读。 不仅如此，在保证高可用方面，官方推出了Sentinel（哨兵）作为高可用的解决方案，在集群中的节点出现故障时能够及时进行故障转移，踢掉不可用的节点。 这篇文章记录下在本地使用docker来搭">
 <meta name="keywords" content="Redis">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Dokcer环境下 Redis 集群搭建">
-<meta property="og:url" content="http://yoursite.com/2018/06/18/Redis 集群搭建/index.html">
+<meta property="og:title" content="Dokcer环境下 Redis 主从搭建">
+<meta property="og:url" content="http://yoursite.com/2018/06/18/Redis 主从搭建/index.html">
 <meta property="og:site_name" content="赵涛’Blog">
 <meta property="og:description" content="为什么要搭建 Redis 集群？虽然Redis单机性能已经很高了，但是 实际上Redis是可以像MySQL那样支持主从结构的，也就是常见的读写分离，主机master负责键的新增和修改，从机slave负责读。 不仅如此，在保证高可用方面，官方推出了Sentinel（哨兵）作为高可用的解决方案，在集群中的节点出现故障时能够及时进行故障转移，踢掉不可用的节点。 这篇文章记录下在本地使用docker来搭">
 <meta property="og:locale" content="zh-Hans">
@@ -108,9 +108,9 @@
 <meta property="og:image" content="http://paieqp4kn.bkt.clouddn.com/2018-06-18-144618.png">
 <meta property="og:image" content="http://paieqp4kn.bkt.clouddn.com/2018-06-18-144747.png">
 <meta property="og:image" content="http://paieqp4kn.bkt.clouddn.com/2018-06-18-144856.png">
-<meta property="og:updated_time" content="2018-06-18T14:58:19.883Z">
+<meta property="og:updated_time" content="2018-06-23T08:49:56.425Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Dokcer环境下 Redis 集群搭建">
+<meta name="twitter:title" content="Dokcer环境下 Redis 主从搭建">
 <meta name="twitter:description" content="为什么要搭建 Redis 集群？虽然Redis单机性能已经很高了，但是 实际上Redis是可以像MySQL那样支持主从结构的，也就是常见的读写分离，主机master负责键的新增和修改，从机slave负责读。 不仅如此，在保证高可用方面，官方推出了Sentinel（哨兵）作为高可用的解决方案，在集群中的节点出现故障时能够及时进行故障转移，踢掉不可用的节点。 这篇文章记录下在本地使用docker来搭">
 <meta name="twitter:image" content="http://paieqp4kn.bkt.clouddn.com/2018-06-18-135517.jpg">
 
@@ -141,13 +141,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/06/18/Redis 集群搭建/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/06/18/Redis 主从搭建/"/>
 
 
 
 
 
-  <title>Dokcer环境下 Redis 集群搭建 | 赵涛’Blog</title>
+  <title>Dokcer环境下 Redis 主从搭建 | 赵涛’Blog</title>
   
 
 
@@ -321,7 +321,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/18/Redis 集群搭建/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/18/Redis 主从搭建/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -338,7 +338,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Dokcer环境下 Redis 集群搭建</h1>
+          <h1 class="post-title" itemprop="name headline">Dokcer环境下 Redis 主从搭建</h1>
         
 
         <div class="post-meta">
@@ -369,9 +369,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/06/18/Redis 集群搭建/#comments" itemprop="discussionUrl">
+                <a href="/2018/06/18/Redis 主从搭建/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/18/Redis 集群搭建/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/06/18/Redis 主从搭建/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -573,7 +573,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -782,9 +782,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/06/18/Redis 集群搭建/';
-          this.page.identifier = '2018/06/18/Redis 集群搭建/';
-          this.page.title = 'Dokcer环境下 Redis 集群搭建';
+          this.page.url = 'http://yoursite.com/2018/06/18/Redis 主从搭建/';
+          this.page.identifier = '2018/06/18/Redis 主从搭建/';
+          this.page.title = 'Dokcer环境下 Redis 主从搭建';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zhaot.disqus.com/embed.js';
