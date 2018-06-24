@@ -115,7 +115,7 @@
 <meta property="og:image" content="http://paieqp4kn.bkt.clouddn.com/2018-06-24-075834.png">
 <meta property="og:image" content="http://paieqp4kn.bkt.clouddn.com/2018-06-24-080643.png">
 <meta property="og:image" content="http://paieqp4kn.bkt.clouddn.com/2018-06-24-080655.png">
-<meta property="og:updated_time" content="2018-06-24T08:21:05.747Z">
+<meta property="og:updated_time" content="2018-06-24T08:27:59.760Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis cluster集群介绍">
 <meta name="twitter:description" content="Redis Cluster 是为了解决什么问题？虽然Redis的单机性能已经足够高了，但是面对互联网企业动辄几百G 的缓存数据，此时性能再好的单机也无法满足业务需求了。在这种情况下 Redis官方推出了集群模式：Redis Cluster。Redis Cluster管理的是一组Redis，每个Redis称为一个节点。由于可以在集群中任意扩展节点，所以Cluster主要是提高了缓存系统扩展性，当然">
@@ -418,6 +418,7 @@
 <li><code>Redis Sentinel</code>哨兵，监控所有节点的状况，提升的是可用性；</li>
 <li><code>Redis Cluster</code>集群，提升的是可扩展性，以及性能；</li>
 </ol>
+<a id="more"></a>
 <h3 id="Redis-Cluster-介绍"><a href="#Redis-Cluster-介绍" class="headerlink" title="Redis Cluster 介绍"></a>Redis Cluster 介绍</h3><p><code>Redis</code>集群通过分片的方式来保存数据库中的键值对，集群的整个数据库被分成<code>16384</code>个 槽（<code>slot</code>），然后把所有的键值对均匀的分散到这些槽位中，每个节点可以存储不同的槽数。 简单的经典架构如下图：<br><img src="http://paieqp4kn.bkt.clouddn.com/2018-06-23-095844.jpg" alt=""><br>上图展示的是一种主从复制模型，包含三个<code>master</code>，每个<code>master</code>有一个<code>slave</code>，每个<code>master</code>分得不同的槽位。一个槽位（坑位）可以存放多个键值对，当2号<code>master</code>节点挂掉的时候，整个集群就会以为缺少5462-10922这个范围的槽而不可用，而此时集群会选举<code>slave</code>作为主节点，整个集群便不会因为槽找不到而不可用了。但是当主从节点都挂掉的时候，此时集群是不可用的。</p>
 <h3 id="数据一致性"><a href="#数据一致性" class="headerlink" title="数据一致性"></a>数据一致性</h3><p>Redis 并不能保证数据的强一致性，所谓强一致性，是指主从节点在任何时候都是一样的，Redis 无法保证这一点。考虑以下两种情况：<br>1.主从节点复制延迟：<br>主节点对命令的复制工作发生在返回命令回复之后， 因为如果每次处理命令请求都需要等待复制操作完成的话， 那么主节点处理命令请求的速度将极大地降低 —— 我们必须在性能和一致性之间做出权衡。 注意：Redis 集群可能会在将来提供同步写的方法。<br>2.出现网络分区：<br>举个例子 假设集群包含 A 、 B 、 C 、 A1 、 B1 、 C1 六个节点， 其中 A 、B 、C 为主节点， A1 、B1 、C1 为A，B，C的从节点， 还有一个客户端 Z1 假设集群中发生网络分区，那么集群可能会分为两方，大部分的一方包含节点 A 、C 、A1 、B1 和 C1 ，小部分的一方则包含节点 B 和客户端 Z1 .</p>
 <p><strong>Z1仍然能够向主节点B中写入, 如果网络分区发生时间较短,那么集群将会继续正常运作,如果分区的时间足够让大部分的一方将B1选举为新的master，那么Z1写入B中得数据便丢失了.</strong></p>

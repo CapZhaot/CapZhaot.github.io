@@ -395,56 +395,20 @@
 
       
         
-          
-            <p><img src="http://www.allthingsdistributed.com/images/ecredis.png" alt=""></p>
+          <p><img src="http://www.allthingsdistributed.com/images/ecredis.png" alt=""></p>
 <h3 id="Redis-Cluster-是为了解决什么问题？"><a href="#Redis-Cluster-是为了解决什么问题？" class="headerlink" title="Redis Cluster 是为了解决什么问题？"></a>Redis Cluster 是为了解决什么问题？</h3><p>虽然<code>Redis</code>的单机性能已经足够高了，但是面对互联网企业动辄几百G 的缓存数据，此时性能再好的单机也无法满足业务需求了。在这种情况下 <code>Redis</code>官方推出了集群模式：<code>Redis Cluster</code>。<code>Redis Cluster</code>管理的是一组<code>Redis</code>，每个<code>Redis</code>称为一个节点。由于可以在集群中任意扩展节点，所以<code>Cluster</code>主要是提高了缓存系统扩展性，当然还提升了性能。我们知道，衡量一个系统有很多个指标，主要是包括性能，可用性，可扩展性，从这些方面，我们可以总结一下 ：</p>
 <ol>
 <li><code>Redis</code> 主从复制，提升的是读写性能以及数据的安全性（备份）；</li>
 <li><code>Redis Sentinel</code>哨兵，监控所有节点的状况，提升的是可用性；</li>
 <li><code>Redis Cluster</code>集群，提升的是可扩展性，以及性能；</li>
 </ol>
-<h3 id="Redis-Cluster-介绍"><a href="#Redis-Cluster-介绍" class="headerlink" title="Redis Cluster 介绍"></a>Redis Cluster 介绍</h3><p><code>Redis</code>集群通过分片的方式来保存数据库中的键值对，集群的整个数据库被分成<code>16384</code>个 槽（<code>slot</code>），然后把所有的键值对均匀的分散到这些槽位中，每个节点可以存储不同的槽数。 简单的经典架构如下图：<br><img src="http://paieqp4kn.bkt.clouddn.com/2018-06-23-095844.jpg" alt=""><br>上图展示的是一种主从复制模型，包含三个<code>master</code>，每个<code>master</code>有一个<code>slave</code>，每个<code>master</code>分得不同的槽位。一个槽位（坑位）可以存放多个键值对，当2号<code>master</code>节点挂掉的时候，整个集群就会以为缺少5462-10922这个范围的槽而不可用，而此时集群会选举<code>slave</code>作为主节点，整个集群便不会因为槽找不到而不可用了。但是当主从节点都挂掉的时候，此时集群是不可用的。</p>
-<h3 id="数据一致性"><a href="#数据一致性" class="headerlink" title="数据一致性"></a>数据一致性</h3><p>Redis 并不能保证数据的强一致性，所谓强一致性，是指主从节点在任何时候都是一样的，Redis 无法保证这一点。考虑以下两种情况：<br>1.主从节点复制延迟：<br>主节点对命令的复制工作发生在返回命令回复之后， 因为如果每次处理命令请求都需要等待复制操作完成的话， 那么主节点处理命令请求的速度将极大地降低 —— 我们必须在性能和一致性之间做出权衡。 注意：Redis 集群可能会在将来提供同步写的方法。<br>2.出现网络分区：<br>举个例子 假设集群包含 A 、 B 、 C 、 A1 、 B1 、 C1 六个节点， 其中 A 、B 、C 为主节点， A1 、B1 、C1 为A，B，C的从节点， 还有一个客户端 Z1 假设集群中发生网络分区，那么集群可能会分为两方，大部分的一方包含节点 A 、C 、A1 、B1 和 C1 ，小部分的一方则包含节点 B 和客户端 Z1 .</p>
-<p><strong>Z1仍然能够向主节点B中写入, 如果网络分区发生时间较短,那么集群将会继续正常运作,如果分区的时间足够让大部分的一方将B1选举为新的master，那么Z1写入B中得数据便丢失了.</strong></p>
-<p>注意， 在网络分裂出现期间， 客户端 Z1 可以向主节点 B 发送写命令的最大时间是有限制的， 这一时间限制称为节点超时时间（node timeout）， 是 Redis 集群的一个重要的配置选项：</p>
-<h3 id="搭建集群环境"><a href="#搭建集群环境" class="headerlink" title="搭建集群环境"></a>搭建集群环境</h3><p>这里我们创建包含6台机器的集群，采取三主三从的模式，每个<code>master</code>有一个<code>slave</code>，端口分配分别是<code>6380，6381，6382，6283，6384，6385</code>. 这里没有采用<code>docker</code>环境，因为官方教程上说需要<code>docker</code>开启<code>host</code>的网络连接模式，但是这种模式仅支持<code>linux</code>系统，因此这里采用的是直接<code>redis-server xxx/redis-x.conf</code>方式启动六台机器。目录结构如下<img src="http://paieqp4kn.bkt.clouddn.com/2018-06-24-044524.png" alt="">。</p>
-<p>这六个<code>redis</code>实例启动后，还没有组建成一个集群环境，官方提供了一个<code>redis-trib.rb</code>脚本来搭建集群，所以需要在<code>Mac</code>上先安装<code>ruby</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install ruby</span><br></pre></td></tr></table></figure></p>
-<p>安装<code>ruby</code>的 redis 支持<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem install redis</span><br></pre></td></tr></table></figure></p>
-<p>上面的<code>redis-trib.rb</code>文件是在<code>redis</code>的源码<code>src</code>目录里，如果找不到，可以去 <code>github</code>，<code>redis</code>项目 里面去找。另外这个文件还要增加可执行权限。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x redis-trib.rb</span><br></pre></td></tr></table></figure></p>
-<p>然后就可以用这个脚本来构建集群了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./redis-trib.rb create --replicas 1 127.0.0.1:6380 127.0.0.1:6382 127.0.0.1:6384 127.0.0.1:6385  127.0.0.1:6381 127.0.0.1:6383</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p><code>replicas 1</code>表示一主一从的模式，后面跟六个实例<code>ip</code>和端口。</p>
-</blockquote>
-<p>启动完成后，会显示槽分配完成<br><img src="http://paieqp4kn.bkt.clouddn.com/2018-06-24-045305.png" alt=""></p>
-<p>此时我们就拥有一个<code>redis</code>集群了！</p>
-<p><strong>连接集群</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-cli -c -p 6380</span><br></pre></td></tr></table></figure></p>
-<p>此时显示出 key 被分配到了哪一个槽<br><img src="http://paieqp4kn.bkt.clouddn.com/2018-06-24-064921.png" alt=""><br>此时包含一个从机<br><img src="http://paieqp4kn.bkt.clouddn.com/2018-06-24-065041.png" alt=""></p>
-<p><strong>cluster API</strong><br>可以使用<code>redis-cli</code>直接连接后（要加上<code>-c</code>参数），查看集群信息</p>
-<ol>
-<li><code>cluster info</code>：查看集群信息<br><img src="http://paieqp4kn.bkt.clouddn.com/2018-06-24-065300.png" alt=""></li>
-<li><code>cluster nodes</code> 查看所有节点信息<br><img src="http://paieqp4kn.bkt.clouddn.com/2018-06-24-065609.png" alt=""></li>
-</ol>
-<p><a href="https://redis.io/commands#cluster" target="_blank" rel="noopener">所有命令列表</a></p>
-<h3 id="集群机制说明"><a href="#集群机制说明" class="headerlink" title="集群机制说明"></a>集群机制说明</h3><p>####节点是如何加入集群的？<br>通过<code>cluster meet</code>指令，连接到集群中的任意一个节点后，比如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cluster meet 127.0.0.1 7001</span><br></pre></td></tr></table></figure></p>
-<p>意思是把<code>7001</code>加入到当前的集群中，但是<code>7001</code>目前是没有分配槽的。<br>这个命令是如何实现的呢？大致过程是这样，比如 A和 B，B 此时想要加入加入节点，那么 A和 B 先通信，二者确认无误后，A 会通过<code>Gossip</code>协议把节点 B 的信息传播给其他节点，让其他节点和 B 进行通信握手，最终 B 节点就会被集群中的所有节点认识。</p>
-<h4 id="槽信息是如何保存的？"><a href="#槽信息是如何保存的？" class="headerlink" title="槽信息是如何保存的？"></a>槽信息是如何保存的？</h4><p>首先每个节点中有这样一个结构来记录槽信息:<br><img src="http://paieqp4kn.bkt.clouddn.com/2018-06-24-074130.png" alt=""><br>这样判断哪个槽是否在当前节点上时，复杂度为<code>O(1)</code>.</p>
-<p>那如何知道哪个槽在哪个节点上？<br>还有一个数据结构在记录，是<code>clusterState</code><br><img src="http://paieqp4kn.bkt.clouddn.com/2018-06-24-074333.png" alt=""><br>这个<code>slots</code>就记录了每个槽对应那个节点！这样在查询时复杂度也是<code>O(1)</code>.</p>
-<p>不得不佩服，这样存储非常高效！</p>
-<p>####集群模式下命令如何执行的？<br>当客户端发起增啥改查命令时，节点需要做以下事情。</p>
-<ol>
-<li>检查键所在的槽是否在当前节点，如果是，执行执行命令。</li>
-<li>如果槽不在当前节点，节点会向客户端返回<code>moved</code>错误，引导客户端转向正确的节点。</li>
-</ol>
-<p>####节点数据库和单机数据库有啥区别？<br>集群节点对键值对的保存以及过期时间的处理完全一样。一个区别是节点只能使用0号数据库，单机可以设置多个数据库。</p>
-<p>####重新分片如何实现的？<br>重新分片是指把一个节点的槽位拿一部分出来，放到新节点上，因为新加入的节没有槽位。</p>
-<p><strong>实现原理：</strong><br><img src="http://paieqp4kn.bkt.clouddn.com/2018-06-24-075834.png" alt=""></p>
-<h5 id="ASK-错误"><a href="#ASK-错误" class="headerlink" title="ASK 错误"></a>ASK 错误</h5><p>考虑一种情况，要把节点 A 的部分槽位迁移到 B上，此时有一部分已经迁移到 B 上了，此时客户端开始请求，那么节点 A 会先查找是否存在本身节点上，如果不存在，会返回<code>ASK</code>错误，并引导客户端向 B 请求。<br>过程如下：<br><img src="http://paieqp4kn.bkt.clouddn.com/2018-06-24-080643.png" alt=""><br><img src="http://paieqp4kn.bkt.clouddn.com/2018-06-24-080655.png" alt=""></p>
-<h4 id="故障转移"><a href="#故障转移" class="headerlink" title="故障转移"></a>故障转移</h4><p>当主节点不可用时，从节点会成为主节点。</p>
-<h4 id="故障检测"><a href="#故障检测" class="headerlink" title="故障检测"></a>故障检测</h4><p>集群中的每个节点都会定期向集群中的其他节点发送<code>PING</code>信息，检测对方是否在线。如果没在规定时间内返回<code>PONG</code>信息，那么就会被标记为疑似下线（<code>PFAIL</code>）.如果在一个集群中，半数以上的主节点都将某个主节点标记为疑似下线，那么这个主节点将会被标记为下线（<code>FAIL</code>）。</p>
-<p>主节点下线后，故障转移开始，其他的主节点开始选举下线主节点的某个从节点作为 主节点，当从节点获取的票数<code>&gt;=N/2+1</code>时，该从节点升级为主节点。选举算法基于<code>Raft</code>算法。</p>
-<p>###参考<br><a href="http://www.cnblogs.com/mafly/p/redis_cluster.html" target="_blank" rel="noopener">Redis 集群搭建详细指南</a><br><a href="http://www.redis.cn/topics/cluster-tutorial.html" target="_blank" rel="noopener">Redis 集群教程-官方文档</a><br><a href="https://www.zhihu.com/question/21419897" target="_blank" rel="noopener">Redis集群方案应该怎么做？</a></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/06/24/Redis 集群实战/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
